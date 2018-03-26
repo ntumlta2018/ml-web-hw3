@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-115414898-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-115414898-1');
+  </script>
+</head>
+
+
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<meta name="author" content="jackie840129" >
+<meta charset="UTF-8">
+
+
+<title>Machine Learning (2018, Spring) - HW3</title>
+
+<xmp theme="united" style="display:none;">
+  
+# Problem 3: Analyze the Model by Confusion Matrix
+
+Problem Description: 
+
+* put the prediction and true label in cofusion matrix of your splited validation data
+* describe what you observed
+
+Hint:
+
+* you can pick up some images and record their probability distributions over 7 classes.
+
+## 範例
+**[Note] 請不要直接使用助教的圖來當成作業交上來**
+
+![r3](http://i.imgur.com/nTWMqGn.png)
+
+
+<!--## TA hour-->
+<!--假設已經訓練了一個不錯的模型,將其預測在validation data上。-->
+
+<!--<i class="fa fa-diamond"></i> Keywords: `sklearn.metrics.confusion_matrix`, `keras.load_model`-->
+
+<!--<div id="doc" class="markdown-body container-fluid" style="position: relative;"><h1 id="hw3-手把手-q3"><a class="anchor hidden-xs" href="#hw3-手把手-q3" title="hw3-手把手-q3"><span class="octicon octicon-link"></span></a>HW3 手把手 Q3</h1><h2 id="畫confusion-matrix"><a class="anchor hidden-xs" href="#畫confusion-matrix" title="畫confusion-matrix"><span class="octicon octicon-link"></span></a>畫Confusion Matrix</h2><pre><code class="python hljs"><span class="hljs-comment">#!/usr/bin/env python</span>-->
+<!--<span class="hljs-comment"># -- coding: utf-8 --</span>-->
+<!--<span class="hljs-keyword">from</span> keras.models <span class="hljs-keyword">import</span> load_model-->
+<!--<span class="hljs-keyword">from</span> sklearn.metrics <span class="hljs-keyword">import</span> confusion_matrix-->
+<!--<span class="hljs-keyword">from</span> utils <span class="hljs-keyword">import</span> *-->
+<!--<span class="hljs-keyword">import</span> itertools-->
+<!--<span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np-->
+<!--<span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt-->
+
+<!--<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">plot_confusion_matrix</span><span class="hljs-params">(cm, classes,-->
+                          <!--title=<span class="hljs-string">'Confusion matrix'</span>,-->
+                          <!--cmap=plt.cm.jet)</span>:</span>-->
+    <!--<span class="hljs-string">"""-->
+    <!--This function prints and plots the confusion matrix.-->
+    <!--"""</span>-->
+    <!--cm = cm.astype(<span class="hljs-string">'float'</span>) / cm.sum(axis=<span class="hljs-number">1</span>)[:, np.newaxis]-->
+    <!--plt.imshow(cm, interpolation=<span class="hljs-string">'nearest'</span>, cmap=cmap)-->
+    <!--plt.title(title)-->
+    <!--plt.colorbar()-->
+    <!--tick_marks = np.arange(len(classes))-->
+    <!--plt.xticks(tick_marks, classes, rotation=<span class="hljs-number">45</span>)-->
+    <!--plt.yticks(tick_marks, classes)-->
+
+    <!--thresh = cm.max() / <span class="hljs-number">2.</span>-->
+    <!--<span class="hljs-keyword">for</span> i, j <span class="hljs-keyword">in</span> itertools.product(range(cm.shape[<span class="hljs-number">0</span>]), range(cm.shape[<span class="hljs-number">1</span>])):-->
+        <!--plt.text(j, i, <span class="hljs-string">'{:.2f}'</span>.format(cm[i, j]), horizontalalignment=<span class="hljs-string">"center"</span>,-->
+                 <!--color=<span class="hljs-string">"white"</span> <span class="hljs-keyword">if</span> cm[i, j] &gt; thresh <span class="hljs-keyword">else</span> <span class="hljs-string">"black"</span>)-->
+    <!--plt.tight_layout()-->
+    <!--plt.ylabel(<span class="hljs-string">'True label'</span>)-->
+    <!--plt.xlabel(<span class="hljs-string">'Predicted label'</span>)-->
+
+<!--<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">read_dataset</span><span class="hljs-params">(data_path)</span>:</span>-->
+    <!--train_pixels = load_pickle(data_path)-->
+    <!--<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(len(train_pixels)):-->
+        <!--train_pixels[i] = np.fromstring(train_pixels[i], dtype=float, sep=<span class="hljs-string">' '</span>).reshape((<span class="hljs-number">48</span>, <span class="hljs-number">48</span>, <span class="hljs-number">1</span>))-->
+    <!--<span class="hljs-keyword">return</span> np.asarray(train_pixels)-->
+
+<!--<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_labels</span><span class="hljs-params">(data_path)</span>:</span>-->
+    <!--train_labels = load_pickle(data_path)-->
+    <!--train = []-->
+    <!--<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(len(train_labels)):-->
+        <!--train.append(int(train_labels[i]))-->
+    <!--<span class="hljs-keyword">return</span> np.asarray(train)-->
+
+<!--<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>:</span>-->
+    <!--model_path = <span class="hljs-string">'model/model-7.h5'</span>-->
+    <!--emotion_classifier = load_model(model_path)-->
+    <!--np.set_printoptions(precision=<span class="hljs-number">2</span>)-->
+    <!--dev_feats = read_dataset(<span class="hljs-string">'../test_with_ans_pixels.pkl'</span>)-->
+    <!--predictions = emotion_classifier.predict(dev_feats)-->
+    <!--predictions = predictions.argmax(axis=<span class="hljs-number">-1</span>)-->
+    <!--<span class="hljs-keyword">print</span> (predictions)-->
+    <!--te_labels = get_labels(<span class="hljs-string">'../test_with_ans_labels.pkl'</span>)-->
+    <!--<span class="hljs-keyword">print</span> (te_labels)-->
+    <!--conf_mat = confusion_matrix(te_labels,predictions)-->
+
+    <!--plt.figure()-->
+    <!--plot_confusion_matrix(conf_mat, classes=[<span class="hljs-string">"Angry"</span>,<span class="hljs-string">"Disgust"</span>,<span class="hljs-string">"Fear"</span>,<span class="hljs-string">"Happy"</span>,<span class="hljs-string">"Sad"</span>,<span class="hljs-string">"Surprise"</span>,<span class="hljs-string">"Neutral"</span>])-->
+    <!--plt.show()-->
+
+<!--<span class="hljs-keyword">if</span> __name__==<span class="hljs-string">'__main__'</span>:-->
+    <!--main()-->
+<!--</code></pre><div class="resize-sensor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; z-index: -1; visibility: hidden;"><div class="resize-sensor-expand" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;"><div style="position: absolute; left: 0px; top: 0px; transition: 0s; width: 100000px; height: 100000px;"></div></div><div class="resize-sensor-shrink" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;"><div style="position: absolute; left: 0; top: 0; transition: 0s; width: 200%; height: 200%"></div></div></div></div>-->
+
+
+</xmp>
+<script src="strapdown.js"></script> 
+
+
+<footer>
+  <center><i class="fa fa-github"></i></a> Posted by: <a href="https://github.com/yangchris11/" target="_blank">Eric Lee</a>.</center>
+  <center><i class="fa fa-envelope"></i> Contact info: <a href="mailto:"> ntumlta2018@gmail.com </a>.</center>
+  <center><i class="fa fa-mortar-board"></i> Course website: <a href="http://163.28.17.129/mlcourse/#", target="_blank">Machine Learning (2018, Spring) @ National Taiwan University</a>.</center>
+  <center><i class="fa fa-cc"></i> Based on <a href="https://getbootstrap.com" target="_blank">Bootstrap</a>. Icons from <a href="https://fontawesome.com" target="_blank">Font-Awesome</a>. Web fonts from <a href="https://fonts.google.com" target="_blank">Google</a>.</center>
+</footer>
+
+</html>
+
